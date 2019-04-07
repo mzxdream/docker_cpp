@@ -10,3 +10,4 @@ RUN sed -i s@/archive.ubuntu.com/@/mirrors.aliyun.com/@g /etc/apt/sources.list \
         git \
         vim \
         curl \
+    && rm -rf /var/lib/apt/lists/*
