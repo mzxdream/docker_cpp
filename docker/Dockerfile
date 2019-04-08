@@ -10,4 +10,6 @@ RUN sed -i s@/archive.ubuntu.com/@/mirrors.aliyun.com/@g /etc/apt/sources.list \
         git \
         vim \
         curl \
+        cmake \
+        python3-dev \
     && rm -rf /var/lib/apt/lists/*
