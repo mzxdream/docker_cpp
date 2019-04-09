@@ -12,4 +12,5 @@ RUN sed -i s@/archive.ubuntu.com/@/mirrors.aliyun.com/@g /etc/apt/sources.list \
         curl \
         cmake \
         python3-dev \
+        ctags \
     && rm -rf /var/lib/apt/lists/*
