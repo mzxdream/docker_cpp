@@ -33,12 +33,10 @@ RUN apt-get update \
         cmake \
         python-dev \
         ctags \
-    && rm -rf /var/lib/apt/lists/* \
-    && curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
+    && rm -rf /var/lib/apt/lists/*
+COPY .vimrc /root/.vimrc
+RUN curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
         https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim \
-    && git clone --depth=1 https://github.com/mzxdream/vimrc.git \
-    && cp vimrc/.vimrc ~/.vimrc \
-    && rm -rf vimrc \
     && vim --not-a-term -c "PlugInstall! | qall!" \
     && cd /root/.vim/plugged/YouCompleteMe \
     && python install.py
