@@ -15,14 +15,12 @@ ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
 #timezone
-ENV TZ 'Asia/shanghai'
-RUN echo $TZ > /etc/timezone \
-    && apt-get update \
+RUN apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
         tzdata \
     && rm -rf /var/lib/apt/lists/* \
-    && rm /etc/localtime \
-    && ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
+    && ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
+    && echo "Asia/Shanghai" > /etc/timezone \
     && dpkg-reconfigure -f noninteractive tzdata
 #vim
 RUN apt-get update \
