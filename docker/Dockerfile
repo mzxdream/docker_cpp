@@ -22,6 +22,20 @@ RUN apt-get update \
     && ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
     && echo "Asia/Shanghai" > /etc/timezone \
     && dpkg-reconfigure -f noninteractive tzdata
+#zsh
+RUN apt-get update \
+    && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+        zsh \
+    && rm -rf /var/lib/apt/lists/* \
+    && chsh -s /bin/zsh \
+    && sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+COPY .zshrc /root/.zshrc
+#tmux
+RUN apt-get update \
+    && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+        tmux \
+    && rm -rf /var/lib/apt/lists/*
+COPY .tmux.conf /root/.tmux.conf
 #vim
 RUN apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
@@ -40,3 +54,5 @@ RUN curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
     && vim --not-a-term -c "PlugInstall! | qall!" \
     && cd /root/.vim/plugged/YouCompleteMe \
     && python install.py
+
+ENTRYPOINT ["/usr/bin/zsh"]
