@@ -82,8 +82,8 @@ call plug#begin('~/.vim/plugged')
 "}
 
 "YouCompleteMe代码补全{
-    Plug 'Valloric/YouCompleteMe', { 'do': './install.py --clang-completer --go-completer' }
-    let g:ycm_global_ycm_extra_conf='~/.vim/plugged/YouCompleteMe/third_party/ycmd/examples/.ycm_extra_conf.py'
+    Plug 'Valloric/YouCompleteMe', { 'do': './install.py --clang-completer --system-libclang' }
+    let g:ycm_global_ycm_extra_conf='~/.ycm_extra_conf.py'
     let g:ycm_add_preview_to_completeopt = 0
     let g:ycm_show_diagnostics_ui = 0
     let g:ycm_server_log_level = 'info'
@@ -166,24 +166,7 @@ call plug#begin('~/.vim/plugged')
 "}
 
 "括号自动补全{
-    inoremap ( ()<ESC>i
-    inoremap ) <c-r>=ClosePair(')')<CR>
-    inoremap { {}<ESC>i
-    inoremap } <c-r>=ClosePair('}')<CR>
-    inoremap [ []<ESC>i
-    inoremap ] <c-r>=ClosePair(']')<CR>
-    "inoremap < <><ESC>i
-    "inoremap > <c-r>=ClosePair('>')<CR>
-    inoremap ' ''<ESC>i
-    inoremap " ""<ESC>i
-
-    function ClosePair(char)
-        if getline('.')[col('.') - 1] == a:char
-            return "<Right>"
-        else
-            return a:char
-        endif
-    endf
+    Plug 'Raimondi/delimitMate'
 "}
 
 "basic基本设置{

@@ -46,13 +46,15 @@ RUN apt-get update \
         curl \
         cmake \
         python-dev \
+        python3-dev \
         ctags \
+        clang-7 \
+    && update-alternatives --install /usr/bin/clang clang /usr/bin/clang-7 1 --slave /usr/bin/clang++ clang++ /usr/bin/clang++-7 \
     && rm -rf /var/lib/apt/lists/*
 COPY .vimrc /root/.vimrc
+COPY .ycm_extra_conf.py /root/ycm_extra_conf.py
 RUN curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
         https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim \
-    && vim --not-a-term -c "PlugInstall! | qall!" \
-    && cd /root/.vim/plugged/YouCompleteMe \
-    && python install.py
+    && vim --not-a-term -c "PlugInstall! | qall!"
 
 ENTRYPOINT ["/usr/bin/zsh"]
