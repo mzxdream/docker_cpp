@@ -17,6 +17,8 @@
 
 import os
 import ycm_core
+import re
+import subprocess
 
 # These are the compilation flags that will be used in case there's no
 # compilation database set (by default, one is not set).
@@ -44,14 +46,26 @@ flags = [
 '/usr/include',
 '-isystem',
 '/usr/local/include',
-'-isystem',
-'/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../lib/c++/v1',
-'-isystem',
-'/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include',
-'-isystem',
-'/usr/bin/../lib/gcc/x86_64-linux-gnu/7.3.0/../../../../include/c++/7.3.0',
 ]
 
+def LoadSystemIncludes():
+    regex = re.compile(ur'(?:\#include \<...\> search starts here\:)(?P<list>.*?)(?:End of search list)', re.DOTALL)
+    process = subprocess.Popen(['clang', '-v', '-E', '-x', 'c++', '-'], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    process_out, process_err = process.communicate('')
+    output = process_out + process_err
+    includes = []
+    for p in re.search(regex, output).group('list').split('\n'):
+        p = p.strip()
+        if len(p) > 0 and p.find('(framework directory)') < 0:
+            includes.append('-isystem')
+            includes.append(p)
+            for root, dirs, _ in os.walk(p):
+                for dir in dirs:
+                    includes.append('-isystem')
+                    includes.append(os.path.join(root, dir))
+    return includes
+
+flags = flags + LoadSystemIncludes()
 
 # Set this to the absolute path to the folder (NOT the file!) containing the
 # compile_commands.json file to use that instead of 'flags'. See here for
