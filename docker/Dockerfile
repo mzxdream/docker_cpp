@@ -1,8 +1,8 @@
 FROM ubuntu:18.04
 MAINTAINER mzxdream@gmail.com
 
-#change source
-RUN sed -i s@/archive.ubuntu.com/@/mirrors.aliyun.com/@g /etc/apt/sources.list \
+#Global define
+RUN sed -i s@/archive.ubuntu.com/@/mirrors.163.com/@g /etc/apt/sources.list \
     && apt-get clean
 #language
 RUN apt-get update \
@@ -25,11 +25,16 @@ RUN apt-get update \
 #zsh
 RUN apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+        git \
+        curl \
+        ca-certificates \
         zsh \
     && rm -rf /var/lib/apt/lists/* \
     && chsh -s /bin/zsh \
-    && sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
-COPY .zshrc /root/.zshrc
+    && sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)" \
+    && sed -i "$ a setopt no_nomatch" /root/.zshrc \
+    && sed -i "$ a export TERM=xterm-256color" /root/.zshrc \
+    && sed -i "s/ZSH_THEME=.*$/ZSH_THEME=\"tonotdo\"/g" /root/.zshrc
 #tmux
 RUN apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
