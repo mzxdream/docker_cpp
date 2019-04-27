@@ -173,6 +173,9 @@ call plug#begin('~/.vim/plugged')
 
 "basic基本设置{
     Plug 'tpope/vim-sensible'
+    set autochdir              " 自动设置当前目录为正在编辑的目录
+    set mouse=a                " 鼠标支持
+    set matchtime=1            " 匹配括号高亮的时间（单位是十分之一秒）
     set autoindent             " Indent according to previous line.
     set expandtab              " Use spaces instead of tabs.
     set softtabstop=4          " Tab key indents by 4 spaces.
@@ -191,6 +194,7 @@ call plug#begin('~/.vim/plugged')
     set splitright             " Open new windows right of the current window.
     "set cursorline             " Find the current line quickly.
     set wrapscan               " Searches wrap around end-of-file.
+    set wrap                   " 控制长行是否折到下一行显示
     set report=0               " Always report changed lines.
     set synmaxcol=120          " Only highlight the first 200 columns.
 
