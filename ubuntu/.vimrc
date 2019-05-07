@@ -153,12 +153,44 @@ call plug#begin('~/.vim/plugged')
     "let g:indentLine_color_term = 239
 "}
 
+" Don't indent namespace and template
+function! CppNoNamespaceAndTemplateIndent()
+    let l:cline_num = line('.')
+    let l:cline = getline(l:cline_num)   
+    let l:pline_num = prevnonblank(l:cline_num - 1)  
+    let l:pline = getline(l:pline_num)  
+    while l:pline =~# '\(^\s*{\s*\|^\s*//\|^\s*/\*\|\*/\s*$\)'     
+        let l:pline_num = prevnonblank(l:pline_num - 1)   
+        let l:pline = getline(l:pline_num)   
+    endwhile  
+    let l:retv = cindent('.')
+    let l:pindent = indent(l:pline_num)   
+    if l:pline =~# '^\s*template\s*\s*$'      
+        let l:retv = l:pindent 
+    elseif l:pline =~# '\s*typename\s*.*,\s*$'     
+        let l:retv = l:pindent    
+    elseif l:cline =~# '^\s*>\s*$'    
+        let l:retv = l:pindent - &shiftwidth   
+    elseif l:pline =~# '\s*typename\s*.*>\s*$'      
+        let l:retv = l:pindent - &shiftwidth 
+    elseif l:pline =~# '^\s*namespace.*' 
+        let l:retv = 0  
+    endif    
+    return l:retv 
+endfunction
+
 "indent缩进{
+    set autoindent             " Indent according to previous line.
+    set smartindent            " 智能缩进
+    set cindent                " c/c++风格
+    set expandtab              " Use spaces instead of tabs.
+    set tabstop=4
+    set softtabstop=4          " Tab key indents by 4 spaces.
+    set shiftwidth=4           " >> indents by 4 spaces.
+    set shiftround             " >> indents to next multiple of 'shiftwidth'.
     autocmd BufNewFile,BufRead *.h,*.c setfiletype cpp " h和c文件类型用cpp
-    set autoindent                  " 自动缩进
-    set smartindent                 " 智能缩进
-    set cindent                     " c/c++风格
-    set cinoptions+=l1,g0,t0,W4,N-s,:0
+    set cinoptions+=l1,g0,t0,W4,:0,j1,(sus,N-s
+    "set indentexpr=CppNoNamespaceAndTemplateIndent()
 "}
 
 "search{
@@ -176,11 +208,6 @@ call plug#begin('~/.vim/plugged')
     set autochdir              " 自动设置当前目录为正在编辑的目录
     set mouse=a                " 鼠标支持
     set matchtime=1            " 匹配括号高亮的时间（单位是十分之一秒）
-    set autoindent             " Indent according to previous line.
-    set expandtab              " Use spaces instead of tabs.
-    set softtabstop=4          " Tab key indents by 4 spaces.
-    set shiftwidth=4           " >> indents by 4 spaces.
-    set shiftround             " >> indents to next multiple of 'shiftwidth'.
     set helplang=cn            " 中文文档
     set nu
     set cc=100                 " 显示100个字符竖线
