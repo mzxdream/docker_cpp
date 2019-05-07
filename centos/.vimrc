@@ -154,11 +154,19 @@ call plug#begin('~/.vim/plugged')
 "}
 
 "indent缩进{
+    set autoindent             " Indent according to previous line.
+    set smartindent            " 智能缩进
+    set cindent                " c/c++风格
+    set expandtab              " Use spaces instead of tabs.
+    set tabstop=4
+    set softtabstop=4          " Tab key indents by 4 spaces.
+    set shiftwidth=4           " >> indents by 4 spaces.
+    set shiftround             " >> indents to next multiple of 'shiftwidth'.
     autocmd BufNewFile,BufRead *.h,*.c setfiletype cpp " h和c文件类型用cpp
-    set autoindent                  " 自动缩进
-    set smartindent                 " 智能缩进
-    set cindent                     " c/c++风格
-    set cinoptions+=l1,g0,t0,W4,N-s,:0
+    set cinoptions+=l1,g0,t0,W4,:0,j1,(sus,N-s
+    Plug 'rhysd/vim-clang-format'
+    let g:clang_format#command = 'clang-format' 
+    nmap <C-K> :ClangFormat<cr> 
 "}
 
 "search{
@@ -173,14 +181,12 @@ call plug#begin('~/.vim/plugged')
 
 "basic基本设置{
     Plug 'tpope/vim-sensible'
-    set autoindent             " Indent according to previous line.
-    set expandtab              " Use spaces instead of tabs.
-    set softtabstop=4          " Tab key indents by 4 spaces.
-    set shiftwidth=4           " >> indents by 4 spaces.
-    set shiftround             " >> indents to next multiple of 'shiftwidth'.
+    set autochdir              " 自动设置当前目录为正在编辑的目录
+    set mouse=a                " 鼠标支持
+    set matchtime=1            " 匹配括号高亮的时间（单位是十分之一秒）
     set helplang=cn            " 中文文档
     set nu
-    set cc=100                 " 显示100个字符竖线
+    set cc=120                 " 显示n个字符竖线
     set nojoinspaces           " 用J命令合并两行时会用一个空格来分隔
     set fileencodings=utf-8    " 文件编码设置
     set hidden                 " Switch between buffers without having to save first.
@@ -191,8 +197,9 @@ call plug#begin('~/.vim/plugged')
     set splitright             " Open new windows right of the current window.
     "set cursorline             " Find the current line quickly.
     set wrapscan               " Searches wrap around end-of-file.
+    set wrap                   " 控制长行是否折到下一行显示
     set report=0               " Always report changed lines.
-    set synmaxcol=120          " Only highlight the first 200 columns.
+    set synmaxcol=120          " Only highlight the first n columns.
 
     set list                   " Show non-printable characters.
     set listchars=tab:▸\ ,trail:·,precedes:←,extends:→,nbsp:␣ ",space:·
