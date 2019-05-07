@@ -153,32 +153,6 @@ call plug#begin('~/.vim/plugged')
     "let g:indentLine_color_term = 239
 "}
 
-" Don't indent namespace and template
-function! CppNoNamespaceAndTemplateIndent()
-    let l:cline_num = line('.')
-    let l:cline = getline(l:cline_num)   
-    let l:pline_num = prevnonblank(l:cline_num - 1)  
-    let l:pline = getline(l:pline_num)  
-    while l:pline =~# '\(^\s*{\s*\|^\s*//\|^\s*/\*\|\*/\s*$\)'     
-        let l:pline_num = prevnonblank(l:pline_num - 1)   
-        let l:pline = getline(l:pline_num)   
-    endwhile  
-    let l:retv = cindent('.')
-    let l:pindent = indent(l:pline_num)   
-    if l:pline =~# '^\s*template\s*\s*$'      
-        let l:retv = l:pindent 
-    elseif l:pline =~# '\s*typename\s*.*,\s*$'     
-        let l:retv = l:pindent    
-    elseif l:cline =~# '^\s*>\s*$'    
-        let l:retv = l:pindent - &shiftwidth   
-    elseif l:pline =~# '\s*typename\s*.*>\s*$'      
-        let l:retv = l:pindent - &shiftwidth 
-    elseif l:pline =~# '^\s*namespace.*' 
-        let l:retv = 0  
-    endif    
-    return l:retv 
-endfunction
-
 "indent缩进{
     set autoindent             " Indent according to previous line.
     set smartindent            " 智能缩进
@@ -190,7 +164,9 @@ endfunction
     set shiftround             " >> indents to next multiple of 'shiftwidth'.
     autocmd BufNewFile,BufRead *.h,*.c setfiletype cpp " h和c文件类型用cpp
     set cinoptions+=l1,g0,t0,W4,:0,j1,(sus,N-s
-    "set indentexpr=CppNoNamespaceAndTemplateIndent()
+    Plug 'rhysd/vim-clang-format'
+    let g:clang_format#command = 'clang-format' 
+    nmap <C-K> :ClangFormat<cr> 
 "}
 
 "search{
@@ -210,7 +186,7 @@ endfunction
     set matchtime=1            " 匹配括号高亮的时间（单位是十分之一秒）
     set helplang=cn            " 中文文档
     set nu
-    set cc=100                 " 显示100个字符竖线
+    set cc=120                 " 显示n个字符竖线
     set nojoinspaces           " 用J命令合并两行时会用一个空格来分隔
     set fileencodings=utf-8    " 文件编码设置
     set hidden                 " Switch between buffers without having to save first.
@@ -223,7 +199,7 @@ endfunction
     set wrapscan               " Searches wrap around end-of-file.
     set wrap                   " 控制长行是否折到下一行显示
     set report=0               " Always report changed lines.
-    set synmaxcol=120          " Only highlight the first 200 columns.
+    set synmaxcol=120          " Only highlight the first n columns.
 
     set list                   " Show non-printable characters.
     set listchars=tab:▸\ ,trail:·,precedes:←,extends:→,nbsp:␣ ",space:·
