@@ -2,65 +2,93 @@ FROM ubuntu:18.04
 
 MAINTAINER mzxdream@gmail.com
 
-#Global define
+#init
+ENV TERM xterm-256color
+USER root
 RUN sed -i s@/archive.ubuntu.com/@/mirrors.163.com/@g /etc/apt/sources.list \
     && apt-get clean
-#language
-RUN apt-get update \
+    && apt-get update
     && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+        git \
+        curl \
+        ca-certificates \
+        xz-utils
+#language
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
         locales \
-    && rm -rf /var/lib/apt/lists/* \
     && sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen \
     && locale-gen
 ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
 #timezone
-RUN apt-get update \
-    && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
         tzdata \
-    && rm -rf /var/lib/apt/lists/* \
     && ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
     && echo "Asia/Shanghai" > /etc/timezone \
     && dpkg-reconfigure -f noninteractive tzdata
 #zsh
-RUN apt-get update \
-    && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-        git \
-        curl \
-        ca-certificates \
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
         zsh \
-    && rm -rf /var/lib/apt/lists/* \
     && chsh -s /bin/zsh \
     && sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)" \
     && sed -i "$ a setopt no_nomatch" /root/.zshrc \
     && sed -i "$ a export TERM=xterm-256color" /root/.zshrc \
     && sed -i "s/ZSH_THEME=.*$/ZSH_THEME=\"tonotdo\"/g" /root/.zshrc
 #tmux
-RUN apt-get update \
-    && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-        tmux \
-    && rm -rf /var/lib/apt/lists/*
-COPY .tmux.conf /root/.tmux.conf
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+        tmux
+COPY .tmux.conf ~/.tmux.conf
+#clang
+COPY clang+llvm-8.0.0-x86_64-linux-gnu-ubuntu-18.04.tar.xz /tmp/
+RUN cd /tmp \
+    #&& curl -O -C 0 http://releases.llvm.org/8.0.0/clang+llvm-8.0.0-x86_64-linux-gnu-ubuntu-18.04.tar.xz \
+    && tar xvJf clang+llvm-8.0.0-x86_64-linux-gnu-ubuntu-18.04.tar.xz \
+    && cp -r clang+llvm-8.0.0-x86_64-linux-gnu-ubuntu-18.04/bin/* /usr/local/bin/ \
+    && cp -r clang+llvm-8.0.0-x86_64-linux-gnu-ubuntu-18.04/lib/* /usr/local/lib/ \
+    && cp -r clang+llvm-8.0.0-x86_64-linux-gnu-ubuntu-18.04/include/* /usr/local/include/ \
+    && rm -rf clang+llvm-8.0.0-x86_64-linux-gnu-ubuntu-18.04
 #vim
-RUN apt-get update \
-    && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-        build-essential \
-        ca-certificates \
-        git \
-        vim \
-        curl \
-        cmake \
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+        gcc \
+	make \
+        liblua5.1-dev \
+        luajit \
+        libluajit-5.1 \
         python-dev \
-        python3-dev \
+        ruby-dev \
+        libperl-dev \
+        libncurses5-dev \
         ctags \
-        clang-7 \
-    && update-alternatives --install /usr/bin/clang clang /usr/bin/clang-7 1 --slave /usr/bin/clang++ clang++ /usr/bin/clang++-7 \
-    && rm -rf /var/lib/apt/lists/*
-COPY .vimrc /root/.vimrc
-COPY .ycm_extra_conf.py /root/.ycm_extra_conf.py
+    && cd /tmp \
+    && git clone --depth=1 https://github.com/vim/vim.git \
+    && cd vim \
+    && ./configure --with-features=huge \
+        --disable-gui \
+        --disable-netbeans \
+        --enable-multibyte \
+        --enable-rubyinterp \
+        --enable-largefile \
+        --enable-pythoninterp \
+        --with-python-config-dir=/usr/lib/python2.7/config \
+        --enable-perlinterp \
+        --enable-luainterp \
+	--enable-fail-if-missing \
+        --with-luajit \
+        --with-lua-prefix=/usr \
+        --enable-cscope \
+    && make install
+    && rm -rf ../vim
+COPY .vimrc ~/.vimrc
+COPY .ycm_extra_conf.py ~/.ycm_extra_conf.py
 RUN curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
         https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim \
     && vim --not-a-term -c "PlugInstall! | qall!"
+#cpp
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+        g++ \
+	cmake
+#clear
+RUN rm -rf /var/lib/apt/lists/*
 
 ENTRYPOINT ["/usr/bin/zsh"]
