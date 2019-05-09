@@ -46,6 +46,8 @@ flags = [
 '/usr/include',
 '-isystem',
 '/usr/local/include',
+'-isystem',
+'/usr/local/include/c++/v1',
 ]
 
 def LoadSystemIncludes():
@@ -65,7 +67,7 @@ def LoadSystemIncludes():
                     includes.append(os.path.join(root, dir))
     return includes
 
-flags = flags + LoadSystemIncludes()
+#flags = flags + LoadSystemIncludes()
 
 # Set this to the absolute path to the folder (NOT the file!) containing the
 # compile_commands.json file to use that instead of 'flags'. See here for
