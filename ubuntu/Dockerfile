@@ -6,8 +6,8 @@ MAINTAINER mzxdream@gmail.com
 ENV TERM xterm-256color
 USER root
 RUN sed -i s@/archive.ubuntu.com/@/mirrors.163.com/@g /etc/apt/sources.list \
-    && apt-get clean
-    && apt-get update
+    && apt-get clean \
+    && apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
         git \
         curl \
@@ -32,13 +32,13 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
         zsh \
     && chsh -s /bin/zsh \
     && sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)" \
-    && sed -i "$ a setopt no_nomatch" /root/.zshrc \
-    && sed -i "$ a export TERM=xterm-256color" /root/.zshrc \
-    && sed -i "s/ZSH_THEME=.*$/ZSH_THEME=\"tonotdo\"/g" /root/.zshrc
+    && sed -i "$ a setopt no_nomatch" ~/.zshrc \
+    && sed -i "$ a export TERM=xterm-256color" ~/.zshrc \
+    && sed -i "s/ZSH_THEME=.*$/ZSH_THEME=\"tonotdo\"/g" ~/.zshrc
 #tmux
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
         tmux
-COPY .tmux.conf ~/.tmux.conf
+COPY .tmux.conf ~/
 #clang
 COPY clang+llvm-8.0.0-x86_64-linux-gnu-ubuntu-18.04.tar.xz /tmp/
 RUN cd /tmp \
@@ -77,10 +77,10 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
         --with-luajit \
         --with-lua-prefix=/usr \
         --enable-cscope \
-    && make install
+    && make install \
     && rm -rf ../vim
-COPY .vimrc ~/.vimrc
-COPY .ycm_extra_conf.py ~/.ycm_extra_conf.py
+COPY .vimrc ~/
+COPY .ycm_extra_conf.py ~/
 RUN curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
         https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim \
     && vim --not-a-term -c "PlugInstall! | qall!"
