@@ -14,6 +14,10 @@ RUN sed -i s@/archive.ubuntu.com/@/mirrors.163.com/@g /etc/apt/sources.list \
         curl \
         ca-certificates \
         xz-utils \
+        make \
+        cmake \
+        gcc \
+        g++ \
     && git config --global user.name mzxdream \
     && git config --global user.email mzxdream@gmail.com \
     && git config --global credential.helper store
@@ -55,8 +59,6 @@ RUN cd /tmp \
 #vim
 COPY vim /tmp/vim
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-        gcc \
-	make \
         liblua5.1-dev \
         luajit \
         libluajit-5.1 \
@@ -88,10 +90,6 @@ COPY .ycm_extra_conf.py $UHOME/.ycm_extra_conf.py
 RUN curl -fLo $UHOME/.vim/autoload/plug.vim --create-dirs \
         https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim \
     && vim --not-a-term -c "PlugInstall! | qall!"
-#cpp
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-        g++ \
-	cmake
 #clear
 RUN rm -rf /var/lib/apt/lists/*
 
