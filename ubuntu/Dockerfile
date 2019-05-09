@@ -13,9 +13,9 @@ RUN sed -i s@/archive.ubuntu.com/@/mirrors.163.com/@g /etc/apt/sources.list \
         git \
         curl \
         ca-certificates \
-        xz-utils
-    && git config --global user.name mzxdream
-    && git config --global user.email mzxdream@gmail.com
+        xz-utils \
+    && git config --global user.name mzxdream \
+    && git config --global user.email mzxdream@gmail.com \
     && git config --global credential.helper store
 #language
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
