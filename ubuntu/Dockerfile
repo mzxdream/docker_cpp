@@ -39,17 +39,18 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
 #tmux
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
         tmux
-COPY .tmux.conf $UHOME/
+COPY .tmux.conf $UHOME/.tmux.conf
 #clang
-COPY clang+llvm-8.0.0-x86_64-linux-gnu-ubuntu-18.04.tar.xz /tmp/
+COPY clang+llvm-8.0.0-x86_64-linux-gnu-ubuntu-18.04.tar.xz /tmp/clang+llvm-8.0.0-x86_64-linux-gnu-ubuntu-18.04.tar.xz
 RUN cd /tmp \
     #&& curl -O -C 0 http://releases.llvm.org/8.0.0/clang+llvm-8.0.0-x86_64-linux-gnu-ubuntu-18.04.tar.xz \
     && tar xvJf clang+llvm-8.0.0-x86_64-linux-gnu-ubuntu-18.04.tar.xz \
     && cp -r clang+llvm-8.0.0-x86_64-linux-gnu-ubuntu-18.04/bin/* /usr/local/bin/ \
     && cp -r clang+llvm-8.0.0-x86_64-linux-gnu-ubuntu-18.04/lib/* /usr/local/lib/ \
     && cp -r clang+llvm-8.0.0-x86_64-linux-gnu-ubuntu-18.04/include/* /usr/local/include/ \
-    && rm -rf clang+llvm-8.0.0-x86_64-linux-gnu-ubuntu-18.04
+    && rm -rf clang+llvm-8.0.0-x86_64-linux-gnu-ubuntu-18.04 clang+llvm-8.0.0-x86_64-linux-gnu-ubuntu-18.04.tar.xz
 #vim
+COPY vim /tmp/vim
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
         gcc \
 	make \
@@ -61,9 +62,8 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
         libperl-dev \
         libncurses5-dev \
         ctags \
-    && cd /tmp \
-    && git clone --depth=1 https://github.com/vim/vim.git \
-    && cd vim \
+    #&& git clone --depth=1 https://github.com/vim/vim.git /tmp/ \
+    && cd /tmp/vim \
     && ./configure --with-features=huge \
         --disable-gui \
         --disable-netbeans \
@@ -80,8 +80,8 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
         --enable-cscope \
     && make install \
     && rm -rf ../vim
-COPY .vimrc $UHOME/
-COPY .ycm_extra_conf.py $UHOME/
+COPY .vimrc $UHOME/.vimrc
+COPY .ycm_extra_conf.py $UHOME/.ycm_extra_conf.py
 RUN curl -fLo $UHOME/.vim/autoload/plug.vim --create-dirs \
         https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim \
     && vim --not-a-term -c "PlugInstall! | qall!"
