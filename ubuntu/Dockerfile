@@ -48,16 +48,11 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
         tmux
 COPY .tmux.conf $UHOME/.tmux.conf
 #clang
-COPY clang+llvm-8.0.0-x86_64-linux-gnu-ubuntu-18.04.tar.xz /tmp/clang+llvm-8.0.0-x86_64-linux-gnu-ubuntu-18.04.tar.xz
-RUN cd /tmp \
-    #&& curl -O -C 0 http://releases.llvm.org/8.0.0/clang+llvm-8.0.0-x86_64-linux-gnu-ubuntu-18.04.tar.xz \
-    && tar xvJf clang+llvm-8.0.0-x86_64-linux-gnu-ubuntu-18.04.tar.xz \
-    && cp -r clang+llvm-8.0.0-x86_64-linux-gnu-ubuntu-18.04/bin/* /usr/local/bin/ \
-    && cp -r clang+llvm-8.0.0-x86_64-linux-gnu-ubuntu-18.04/lib/* /usr/local/lib/ \
-    && cp -r clang+llvm-8.0.0-x86_64-linux-gnu-ubuntu-18.04/include/* /usr/local/include/ \
-    && rm -rf clang+llvm-8.0.0-x86_64-linux-gnu-ubuntu-18.04 clang+llvm-8.0.0-x86_64-linux-gnu-ubuntu-18.04.tar.xz
+COPY clang/include /usr/local/include/
+COPY clang/lib /usr/local/lib/
+COPY clang/bin /usr/local/bin/
 #vim
-COPY vim /tmp/vim
+#COPY vim /tmp/vim
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
         liblua5.1-dev \
         luajit \
@@ -67,7 +62,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
         libperl-dev \
         libncurses5-dev \
         ctags \
-    #&& git clone --depth=1 https://github.com/vim/vim.git /tmp/ \
+    && git clone --depth=1 https://github.com/vim/vim.git /tmp/vim \
     && cd /tmp/vim \
     && ./configure --with-features=huge \
         --disable-gui \
