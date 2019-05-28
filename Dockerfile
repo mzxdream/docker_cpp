@@ -18,6 +18,7 @@ RUN sed -i s@/archive.ubuntu.com/@/mirrors.163.com/@g /etc/apt/sources.list \
         cmake \
         gcc \
         g++ \
+        gdb \
     && git config --global user.name mzxdream \
     && git config --global user.email mzxdream@gmail.com \
     && git config --global credential.helper store
