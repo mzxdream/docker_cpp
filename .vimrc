@@ -186,7 +186,7 @@ call plug#begin('~/.vim/plugged')
     set matchtime=1            " 匹配括号高亮的时间（单位是十分之一秒）
     set helplang=cn            " 中文文档
     set nu
-    set cc=120                 " 显示n个字符竖线
+    set cc=85                 " 显示n个字符竖线
     set nojoinspaces           " 用J命令合并两行时会用一个空格来分隔
     set fileencodings=utf-8    " 文件编码设置
     set hidden                 " Switch between buffers without having to save first.
@@ -199,7 +199,7 @@ call plug#begin('~/.vim/plugged')
     set wrapscan               " Searches wrap around end-of-file.
     set wrap                   " 控制长行是否折到下一行显示
     set report=0               " Always report changed lines.
-    set synmaxcol=120          " Only highlight the first n columns.
+    set synmaxcol=80          " Only highlight the first n columns.
 
     set list                   " Show non-printable characters.
     set listchars=tab:▸\ ,trail:·,precedes:←,extends:→,nbsp:␣ ",space:·
