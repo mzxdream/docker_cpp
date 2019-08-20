@@ -147,6 +147,9 @@ call plug#begin('~/.vim/plugged')
     Plug 'scrooloose/nerdtree'
     Plug 'Xuyuanp/nerdtree-git-plugin'
     nmap <C-L> :NERDTreeToggle<CR>
+    "打开vim时自动打开NERDTree
+    autocmd vimenter * NERDTree
+    "当NERDTree为剩下的唯一窗口时自动关闭
     autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
     "修改树的显示图标
     let g:NERDTreeDirArrowExpandable = '►'
