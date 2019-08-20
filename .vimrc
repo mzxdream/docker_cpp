@@ -2,6 +2,8 @@ call plug#begin('~/.vim/plugged')
 
 "basic基本设置{
     Plug 'tpope/vim-sensible'
+    " 定义快捷键的前缀，即<Leader> 
+    let g:mapleader=","
     set autochdir              " 自动设置当前目录为正在编辑的目录
     set mouse=a                " 鼠标支持
     set matchtime=1            " 匹配括号高亮的时间（单位是十分之一秒）
@@ -71,6 +73,10 @@ call plug#begin('~/.vim/plugged')
 "tags符号索引{
     Plug 'universal-ctags/ctags'
     Plug 'ludovicchabant/vim-gutentags'
+    Plug 'skywind3000/gutentags_plus'
+    set tags=./.tags;,.tags
+    " enable gtags module
+    let g:gutentags_modules = ['ctags', 'gtags_cscope']
     " gutentags 搜索工程目录的标志，碰到这些文件/目录名就停止向上一级目录递归
     let g:gutentags_project_root = ['.root', '.svn', '.git', '.hg', '.project']
     " 所生成的数据文件的名称
@@ -78,6 +84,10 @@ call plug#begin('~/.vim/plugged')
     " 将自动生成的 tags 文件全部放入 ~/.cache/tags 目录中，避免污染工程目录
     let s:vim_tags = expand('~/.cache/tags')
     let g:gutentags_cache_dir = s:vim_tags
+    " change focus to quickfix window after search (optional).
+    let g:gutentags_plus_switch = 1
+    " forbid gutentags adding gtags databases 
+    let g:gutentags_auto_add_gtags_cscope = 0
     " 配置 ctags 的参数
     let g:gutentags_ctags_extra_args = ['--fields=+niazS', '--extra=+q']
     let g:gutentags_ctags_extra_args += ['--c++-kinds=+px']
