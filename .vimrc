@@ -1,5 +1,67 @@
 call plug#begin('~/.vim/plugged')
 
+"basic基本设置{
+    Plug 'tpope/vim-sensible'
+    set autochdir              " 自动设置当前目录为正在编辑的目录
+    set mouse=a                " 鼠标支持
+    set matchtime=1            " 匹配括号高亮的时间（单位是十分之一秒）
+    set helplang=cn            " 中文文档
+    set nu
+    set cc=85                 " 显示n个字符竖线
+    set nojoinspaces           " 用J命令合并两行时会用一个空格来分隔
+    set fileencodings=utf-8    " 文件编码设置
+    set hidden                 " Switch between buffers without having to save first.
+    set display=lastline       " Show as much as possible of the last line.
+    set ttyfast                " Faster redrawing.
+    set lazyredraw             " Only redraw when necessary.
+    set splitbelow             " Open new windows below the current window.
+    set splitright             " Open new windows right of the current window.
+    "set cursorline             " Find the current line quickly.
+    set wrapscan               " Searches wrap around end-of-file.
+    set wrap                   " 控制长行是否折到下一行显示
+    set report=0               " Always report changed lines.
+    set synmaxcol=80          " Only highlight the first n columns.
+
+    set list                   " Show non-printable characters.
+    set listchars=tab:▸\ ,trail:·,precedes:←,extends:→,nbsp:␣ ",space:·
+    hi NonText ctermfg=239
+    hi SpecialKey ctermfg=239
+
+    "autocmd InsertLeave * se nocul  " 用浅色高亮当前插入行
+    "autocmd InsertEnter * se cul    " 用浅色高亮当前插入行
+    "set cursorcolumn                 "or set cuc 设置光标所在的列
+    "highlight CursorColumn cterm=NONE ctermbg=blue ctermfg=NONE guibg=NONE guifg=NONE
+    "set cursorline                   "or set cul 设置光标所在的行
+    highlight CursorLine cterm=NONE ctermbg=blue ctermfg=NONE guibg=NONE guifg=NONE
+
+    " Put all temporary files under the same directory.
+    let s:vim_backup = expand("$HOME/.vim/files/backup/")
+    if !isdirectory(s:vim_backup)
+        silent! call mkdir(s:vim_backup, 'p')
+    endif
+    let s:vim_swap = expand("$HOME/.vim/files/swap/")
+    if !isdirectory(s:vim_swap)
+        silent! call mkdir(s:vim_swap, 'p')
+    endif
+    let s:vim_undo = expand("$HOME/.vim/files/undo/")
+    if !isdirectory(s:vim_undo)
+        silent! call mkdir(s:vim_undo, 'p')
+    endif
+    let s:vim_info = expand("$HOME/.vim/files/info/")
+    if !isdirectory(s:vim_info)
+        silent! call mkdir(s:vim_info, 'p')
+    endif
+    set backup
+    set backupdir=$HOME/.vim/files/backup/
+    set backupext=-vimbackup
+    set backupskip=
+    set directory=$HOME/.vim/files/swap/
+    set updatecount=100
+    set undofile
+    set undodir=$HOME/.vim/files/undo/
+    set viminfo='100,n$HOME/.vim/files/info/viminfo
+"}
+
 "底部状态{
     Plug 'vim-airline/vim-airline'
     Plug 'vim-airline/vim-airline-themes'
@@ -213,68 +275,6 @@ call plug#begin('~/.vim/plugged')
 
 "括号自动补全{
     Plug 'Raimondi/delimitMate'
-"}
-
-"basic基本设置{
-    Plug 'tpope/vim-sensible'
-    set autochdir              " 自动设置当前目录为正在编辑的目录
-    set mouse=a                " 鼠标支持
-    set matchtime=1            " 匹配括号高亮的时间（单位是十分之一秒）
-    set helplang=cn            " 中文文档
-    set nu
-    set cc=85                 " 显示n个字符竖线
-    set nojoinspaces           " 用J命令合并两行时会用一个空格来分隔
-    set fileencodings=utf-8    " 文件编码设置
-    set hidden                 " Switch between buffers without having to save first.
-    set display=lastline       " Show as much as possible of the last line.
-    set ttyfast                " Faster redrawing.
-    set lazyredraw             " Only redraw when necessary.
-    set splitbelow             " Open new windows below the current window.
-    set splitright             " Open new windows right of the current window.
-    "set cursorline             " Find the current line quickly.
-    set wrapscan               " Searches wrap around end-of-file.
-    set wrap                   " 控制长行是否折到下一行显示
-    set report=0               " Always report changed lines.
-    set synmaxcol=80          " Only highlight the first n columns.
-
-    set list                   " Show non-printable characters.
-    set listchars=tab:▸\ ,trail:·,precedes:←,extends:→,nbsp:␣ ",space:·
-    hi NonText ctermfg=239
-    hi SpecialKey ctermfg=239
-
-    "autocmd InsertLeave * se nocul  " 用浅色高亮当前插入行
-    "autocmd InsertEnter * se cul    " 用浅色高亮当前插入行
-    "set cursorcolumn                 "or set cuc 设置光标所在的列
-    "highlight CursorColumn cterm=NONE ctermbg=blue ctermfg=NONE guibg=NONE guifg=NONE
-    "set cursorline                   "or set cul 设置光标所在的行
-    highlight CursorLine cterm=NONE ctermbg=blue ctermfg=NONE guibg=NONE guifg=NONE
-
-    " Put all temporary files under the same directory.
-    let s:vim_backup = expand("$HOME/.vim/files/backup/")
-    if !isdirectory(s:vim_backup)
-        silent! call mkdir(s:vim_backup, 'p')
-    endif
-    let s:vim_swap = expand("$HOME/.vim/files/swap/")
-    if !isdirectory(s:vim_swap)
-        silent! call mkdir(s:vim_swap, 'p')
-    endif
-    let s:vim_undo = expand("$HOME/.vim/files/undo/")
-    if !isdirectory(s:vim_undo)
-        silent! call mkdir(s:vim_undo, 'p')
-    endif
-    let s:vim_info = expand("$HOME/.vim/files/info/")
-    if !isdirectory(s:vim_info)
-        silent! call mkdir(s:vim_info, 'p')
-    endif
-    set backup
-    set backupdir=$HOME/.vim/files/backup/
-    set backupext=-vimbackup
-    set backupskip=
-    set directory=$HOME/.vim/files/swap/
-    set updatecount=100
-    set undofile
-    set undodir=$HOME/.vim/files/undo/
-    set viminfo='100,n$HOME/.vim/files/info/viminfo
 "}
 
 call plug#end()
