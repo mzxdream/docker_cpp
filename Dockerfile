@@ -62,7 +62,8 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
         ruby-dev \
         libperl-dev \
         libncurses5-dev \
-        ctags \
+        autoconf \
+        pkg-config \
     && git clone --depth=1 https://github.com/vim/vim.git /tmp/vim \
     && cd /tmp/vim \
     && ./configure --with-features=huge \
@@ -80,7 +81,13 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
         --with-lua-prefix=/usr \
         --enable-cscope \
     && make install \
-    && rm -rf ../vim
+    && rm -rf /tmp/vim \
+    && git clone https://github.com/universal-ctags/ctags.git /tmp/ctags \
+    && cd /tmp/ctags \
+    && sh autogen.sh \
+    && ./configure \
+    && make install \
+    && rm -rf /tmp/ctags
 COPY .vimrc $UHOME/.vimrc
 COPY .ycm_extra_conf.py $UHOME/.ycm_extra_conf.py
 RUN curl -fLo $UHOME/.vim/autoload/plug.vim --create-dirs \
