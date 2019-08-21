@@ -62,7 +62,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
         ruby-dev \
         libperl-dev \
         libncurses5-dev \
-        autoconf \
+        automake \
         pkg-config \
     && git clone --depth=1 https://github.com/vim/vim.git /tmp/vim \
     && cd /tmp/vim \
@@ -76,13 +76,13 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
         --with-python-config-dir=$(python2.7-config --configdir) \
         --enable-perlinterp \
         --enable-luainterp \
-	--enable-fail-if-missing \
+        --enable-fail-if-missing \
         --with-luajit \
         --with-lua-prefix=/usr \
         --enable-cscope \
     && make install \
     && rm -rf /tmp/vim \
-    && git clone https://github.com/universal-ctags/ctags.git /tmp/ctags \
+    && git clone --depth=1 https://github.com/universal-ctags/ctags.git /tmp/ctags \
     && cd /tmp/ctags \
     && sh autogen.sh \
     && ./configure \
