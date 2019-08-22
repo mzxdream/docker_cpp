@@ -64,6 +64,8 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
         libncurses5-dev \
         automake \
         pkg-config \
+        python-pip \
+    && pip install requests \
     && git clone --depth=1 https://github.com/vim/vim.git /tmp/vim \
     && cd /tmp/vim \
     && ./configure --with-features=huge \
