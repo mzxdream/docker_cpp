@@ -21,6 +21,8 @@ RUN sed -i s@/archive.ubuntu.com/@/mirrors.163.com/@g /etc/apt/sources.list \
         gdb \
     && git config --global user.name mzxdream \
     && git config --global user.email mzxdream@gmail.com \
+    && git config --global https.proxy socks5://host.docker.internal:1080 \
+    && git config --global http.proxy socks5://host.docker.internal:1080 \
     && git config --global credential.helper store
 #language
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
