@@ -86,7 +86,10 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
         --enable-cscope \
     && make install \
     && rm -rf /tmp/vim
-RUN git clone --depth=1 https://github.com/universal-ctags/ctags.git /tmp/ctags \
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+        global \
+    && pip install pygments \
+    && git clone --depth=1 https://github.com/universal-ctags/ctags.git /tmp/ctags \
     && cd /tmp/ctags \
     && sh autogen.sh \
     && ./configure \
