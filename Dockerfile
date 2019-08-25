@@ -3,8 +3,11 @@ FROM ubuntu:18.04
 MAINTAINER mzxdream@gmail.com
 
 #init
-ENV TERM xterm-256color
-ENV UHOME /root
+ENV TERM=xterm-256color \
+    UHOME=/root
+ARG HTTP_PROXY_ARG="socks5://host.docker.internal:1080"
+ARG HTTPS_PROXY_ARG="socks5://host.docker.internal:1080"
+ARG CURL_ARG="curl --socks5 host.docker.internal:1080"
 USER root
 RUN sed -i s@/archive.ubuntu.com/@/mirrors.163.com/@g /etc/apt/sources.list \
     && apt-get clean \
@@ -21,8 +24,10 @@ RUN sed -i s@/archive.ubuntu.com/@/mirrors.163.com/@g /etc/apt/sources.list \
         gdb \
     && git config --global user.name mzxdream \
     && git config --global user.email mzxdream@gmail.com \
-    && git config --global https.proxy socks5://host.docker.internal:1080 \
-    && git config --global http.proxy socks5://host.docker.internal:1080 \
+    && test -z "$HTTP_PROXY_ARG" || git config --global http.proxy $HTTP_PROXY_ARG && : \
+    && test -z "$HTTPS_PROXY_ARG" || git config --global https.proxy $HTTPS_PROXY_ARG && : \
+    #&& if [ -n "$HTTP_PROXY_ARG"]; then git config --global http.proxy $HTTP_PROXY_ARG; fi \
+    #&& if [ -n "$HTTPS_PROXY_ARG"]; then git config --global https.proxy $HTTPS_PROXY_ARG; fi \
     && git config --global credential.helper store
 #language
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
@@ -42,7 +47,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
         zsh \
     && chsh -s /bin/zsh \
-    && sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)" \
+    && sh -c "$($CURL_ARG -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)" \
     && sed -i "$ a setopt no_nomatch" $UHOME/.zshrc \
     && sed -i "$ a export TERM=xterm-256color" $UHOME/.zshrc \
     && sed -i "s/ZSH_THEME=.*$/ZSH_THEME=\"tonotdo\"/g" $UHOME/.zshrc
@@ -55,7 +60,7 @@ COPY clang/include /usr/local/include/
 COPY clang/lib /usr/local/lib/
 COPY clang/bin /usr/local/bin/
 #vim
-#COPY vim /tmp/vim
+COPY vim /tmp/vim
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
         liblua5.1-dev \
         luajit \
@@ -68,7 +73,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
         pkg-config \
         python-pip \
     && pip install requests \
-    && git clone --depth=1 https://github.com/vim/vim.git /tmp/vim \
+    #&& git clone --depth=1 https://github.com/vim/vim.git /tmp/vim \
     && cd /tmp/vim \
     && ./configure --with-features=huge \
         --disable-gui \
@@ -97,7 +102,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
     && rm -rf /tmp/ctags
 COPY .vimrc $UHOME/.vimrc
 COPY .ycm_extra_conf.py $UHOME/.ycm_extra_conf.py
-RUN curl -fLo $UHOME/.vim/autoload/plug.vim --create-dirs \
+RUN $CURL_ARG -fLo $UHOME/.vim/autoload/plug.vim --create-dirs \
         https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim \
     && vim --not-a-term -c "PlugInstall! | qall!"
 #clear
