@@ -108,3 +108,4 @@ RUN $CURL_ARG -fLo $UHOME/.vim/autoload/plug.vim --create-dirs \
 RUN rm -rf /var/lib/apt/lists/*
 
 ENTRYPOINT ["/usr/bin/zsh"]
+#docker run --name mzx --privileged --net=host -dit mzx:v1
