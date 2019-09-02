@@ -2,14 +2,13 @@ call plug#begin('~/.vim/plugged')
 
 "basic基本设置{
     Plug 'tpope/vim-sensible'
-    " 定义快捷键的前缀，即<Leader> 
-    let g:mapleader=","
-    "set autochdir              " 自动设置当前目录为正在编辑的目录
+    let g:mapleader=","        " 定义快捷键的前缀，即<Leader>
+    "set autochdir             " 自动设置当前目录为正在编辑的目录
     set mouse=a                " 鼠标支持
     set matchtime=1            " 匹配括号高亮的时间（单位是十分之一秒）
     set helplang=cn            " 中文文档
-    set nu
-    set cc=85                 " 显示n个字符竖线
+    set nu                     " 显示行号
+    set cc=85                  " 显示n个字符竖线
     set nojoinspaces           " 用J命令合并两行时会用一个空格来分隔
     set fileencodings=utf-8    " 文件编码设置
     set hidden                 " Switch between buffers without having to save first.
@@ -18,12 +17,11 @@ call plug#begin('~/.vim/plugged')
     set lazyredraw             " Only redraw when necessary.
     set splitbelow             " Open new windows below the current window.
     set splitright             " Open new windows right of the current window.
-    "set cursorline             " Find the current line quickly.
+    "set cursorline            " Find the current line quickly.
     set wrapscan               " Searches wrap around end-of-file.
     set wrap                   " 控制长行是否折到下一行显示
     set report=0               " Always report changed lines.
-    set synmaxcol=80          " Only highlight the first n columns.
-
+    set synmaxcol=80           " Only highlight the first n columns.
     set list                   " Show non-printable characters.
     set listchars=tab:▸\ ,trail:·,precedes:←,extends:→,nbsp:␣ ",space:·
     hi NonText ctermfg=239
@@ -31,9 +29,9 @@ call plug#begin('~/.vim/plugged')
 
     "autocmd InsertLeave * se nocul  " 用浅色高亮当前插入行
     "autocmd InsertEnter * se cul    " 用浅色高亮当前插入行
-    "set cursorcolumn                 "or set cuc 设置光标所在的列
+    "set cursorcolumn                " or set cuc 设置光标所在的列
     "highlight CursorColumn cterm=NONE ctermbg=blue ctermfg=NONE guibg=NONE guifg=NONE
-    "set cursorline                   "or set cul 设置光标所在的行
+    "set cursorline                  " or set cul 设置光标所在的行
     highlight CursorLine cterm=NONE ctermbg=blue ctermfg=NONE guibg=NONE guifg=NONE
 
     " Put all temporary files under the same directory.
