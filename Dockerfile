@@ -5,11 +5,12 @@ MAINTAINER mzxdream@gmail.com
 #init
 ENV TERM=xterm-256color \
     UHOME=/root
-ARG HTTP_PROXY_ARG="socks5://host.docker.internal:1080"
-ARG HTTPS_PROXY_ARG="socks5://host.docker.internal:1080"
-ARG CURL_ARG="curl --socks5 host.docker.internal:1080"
+#ARG HTTP_PROXY_ARG="socks5://host.docker.internal:1080"
+#ARG HTTPS_PROXY_ARG="socks5://host.docker.internal:1080"
+#ARG CURL_ARG="curl --socks5 host.docker.internal:1080"
+ARG CURL_ARG="curl"
 USER root
-RUN sed -i s@/archive.ubuntu.com/@/mirrors.163.com/@g /etc/apt/sources.list \
+RUN sed -i s@/archive.ubuntu.com/@/mirrors.aliyun.com/@g /etc/apt/sources.list \
     && apt-get clean \
     && apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
@@ -26,8 +27,6 @@ RUN sed -i s@/archive.ubuntu.com/@/mirrors.163.com/@g /etc/apt/sources.list \
     && git config --global user.email mzxdream@gmail.com \
     && test -z "$HTTP_PROXY_ARG" || git config --global http.proxy $HTTP_PROXY_ARG && : \
     && test -z "$HTTPS_PROXY_ARG" || git config --global https.proxy $HTTPS_PROXY_ARG && : \
-    #&& if [ -n "$HTTP_PROXY_ARG"]; then git config --global http.proxy $HTTP_PROXY_ARG; fi \
-    #&& if [ -n "$HTTPS_PROXY_ARG"]; then git config --global https.proxy $HTTPS_PROXY_ARG; fi \
     && git config --global credential.helper store
 #language
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
@@ -60,7 +59,7 @@ COPY clang/include /usr/local/include/
 COPY clang/lib /usr/local/lib/
 COPY clang/bin /usr/local/bin/
 #vim
-COPY vim /tmp/vim
+#COPY vim /tmp/vim
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
         liblua5.1-dev \
         luajit \
@@ -73,7 +72,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
         pkg-config \
         python-pip \
     && pip install requests \
-    #&& git clone --depth=1 https://github.com/vim/vim.git /tmp/vim \
+    && git clone --depth=1 https://github.com/vim/vim.git /tmp/vim \
     && cd /tmp/vim \
     && ./configure --with-features=huge \
         --disable-gui \
