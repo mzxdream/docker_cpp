@@ -127,6 +127,7 @@ call plug#begin('~/.vim/plugged')
     noremap <silent> <leader>gi :GscopeFind i <C-R>=expand("<cfile>")<cr><cr>
     noremap <silent> <leader>gd :GscopeFind d <C-R><C-W><cr>
     noremap <silent> <leader>ga :GscopeFind a <C-R><C-W><cr>
+    noremap <silent> <leader>gq :cclose<cr>
 "}
 
 "aysncrun编译运行{
