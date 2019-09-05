@@ -3,6 +3,7 @@ call plug#begin('~/.vim/plugged')
 "basic基本设置{
     Plug 'tpope/vim-sensible'
     let g:mapleader=","        " 定义快捷键的前缀，即<Leader>
+    noremap <silent> <leader>q :cclose<cr> " 关闭quickfix
     "set autochdir             " 自动设置当前目录为正在编辑的目录
     set mouse=a                " 鼠标支持
     set matchtime=1            " 匹配括号高亮的时间（单位是十分之一秒）
@@ -127,7 +128,6 @@ call plug#begin('~/.vim/plugged')
     noremap <silent> <leader>gi :GscopeFind i <C-R>=expand("<cfile>")<cr><cr>
     noremap <silent> <leader>gd :GscopeFind d <C-R><C-W><cr>
     noremap <silent> <leader>ga :GscopeFind a <C-R><C-W><cr>
-    noremap <silent> <leader>gq :cclose<cr>
 "}
 
 "aysncrun编译运行{
