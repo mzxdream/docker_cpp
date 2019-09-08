@@ -319,4 +319,8 @@ call plug#begin('~/.vim/plugged')
     Plug 'Raimondi/delimitMate'
 "}
 
+"golang {
+    Plug 'fatih/vim-go'
+"}
+
 call plug#end()

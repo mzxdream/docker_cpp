@@ -58,6 +58,10 @@ COPY .tmux.conf $UHOME/.tmux.conf
 COPY clang/include /usr/local/include/
 COPY clang/lib /usr/local/lib/
 COPY clang/bin /usr/local/bin/
+#golang
+RUN $CURL_ARG -O https://dl.google.com/go/go1.13.linux-amd64.tar.gz \
+    && tar -C /usr/local -xzf go1.13.linux-amd64.tar.gz \
+    && sed -i "$ a export PATH=$PATH:/usr/local/go/bin" $UHOME/.zshrc
 #vim
 #COPY vim /tmp/vim
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
