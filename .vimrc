@@ -186,7 +186,7 @@ call plug#begin('~/.vim/plugged')
 "}
 
 "YouCompleteMe代码补全{
-    Plug 'Valloric/YouCompleteMe', { 'do': './install.py --clang-completer --system-libclang' }
+    Plug 'Valloric/YouCompleteMe', { 'do': './install.py --clang-completer --go-completer --system-libclang' }
     let g:ycm_global_ycm_extra_conf = '~/.ycm_extra_conf.py'
     let g:ycm_confirm_extra_conf = 0 " 不显示开启vim时检查ycm_extra_conf文件的信息
     let g:ycm_add_preview_to_completeopt = 0

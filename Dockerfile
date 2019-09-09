@@ -61,7 +61,10 @@ COPY clang/bin /usr/local/bin/
 #golang
 RUN $CURL_ARG -O https://dl.google.com/go/go1.13.linux-amd64.tar.gz \
     && tar -C /usr/local -xzf go1.13.linux-amd64.tar.gz \
-    && sed -i "$ a export PATH=$PATH:/usr/local/go/bin" $UHOME/.zshrc
+    && mkdir -p $UHOME/go/{bin,pkg,src} \
+    && echo "export GOROOT=/usr/local/go" >> /etc/profile.d/go.sh \
+    && echo "export GOPATH=$UHOME/go" >> /etc/profile.d/go.sh \
+    && echo 'export PATH=$PATH:$GOROOT/bin:$GOPATH/bin' >> /etc/profile.d/go.sh
 #vim
 #COPY vim /tmp/vim
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
@@ -107,7 +110,8 @@ COPY .vimrc $UHOME/.vimrc
 COPY .ycm_extra_conf.py $UHOME/.ycm_extra_conf.py
 RUN $CURL_ARG -fLo $UHOME/.vim/autoload/plug.vim --create-dirs \
         https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim \
-    && vim --not-a-term -c "PlugInstall! | qall!"
+    && vim --not-a-term -c "PlugInstall! | qall!" \
+    && vim --not-a-term -c "GoInstallBinaries! | qall!"
 #clear
 RUN rm -rf /var/lib/apt/lists/*
 
