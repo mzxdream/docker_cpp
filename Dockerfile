@@ -10,8 +10,9 @@ ENV TERM=xterm-256color \
 #ARG CURL_ARG="curl --socks5 host.docker.internal:1080"
 ARG CURL_ARG="curl"
 USER root
-RUN sed -i s@/archive.ubuntu.com/@/mirrors.aliyun.com/@g /etc/apt/sources.list \
-    && apt-get clean \
+RUN rm -Rf /var/lib/apt/lists/ \
+    && mkdir -p /var/lib/apt/lists/partial/ \
+    && sed -i s@/archive.ubuntu.com/@/mirrors.aliyun.com/@g /etc/apt/sources.list \
     && apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
         git \
@@ -62,9 +63,9 @@ COPY clang/bin /usr/local/bin/
 RUN $CURL_ARG -O https://dl.google.com/go/go1.13.linux-amd64.tar.gz \
     && tar -C /usr/local -xzf go1.13.linux-amd64.tar.gz \
     && mkdir -p $UHOME/go/{bin,pkg,src} \
-    && echo "export GOROOT=/usr/local/go" >> /etc/profile.d/go.sh \
-    && echo "export GOPATH=$UHOME/go" >> /etc/profile.d/go.sh \
-    && echo 'export PATH=$PATH:$GOROOT/bin:$GOPATH/bin' >> /etc/profile.d/go.sh
+    && echo "export GOROOT=/usr/local/go" >> $UHOME/.zshrc \
+    && echo "export GOPATH=$UHOME/go" >> $UHOME/.zshrc \
+    && echo 'export PATH=$PATH:$GOROOT/bin:$GOPATH/bin' >> $UHOME/.zshrc
 #vim
 #COPY vim /tmp/vim
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
@@ -110,10 +111,10 @@ COPY .vimrc $UHOME/.vimrc
 COPY .ycm_extra_conf.py $UHOME/.ycm_extra_conf.py
 RUN $CURL_ARG -fLo $UHOME/.vim/autoload/plug.vim --create-dirs \
         https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim \
-    && vim --not-a-term -c "PlugInstall! | qall!" \
-    && vim --not-a-term -c "GoInstallBinaries! | qall!"
+    && vim --not-a-term -c "PlugInstall! | qall!"
 #clear
 RUN rm -rf /var/lib/apt/lists/*
 
 ENTRYPOINT ["/usr/bin/zsh"]
+#vim GoInstallBinaries
 #docker run --name mzx --privileged --net=host -dit mzx:v1
