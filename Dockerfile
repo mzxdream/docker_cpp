@@ -60,7 +60,9 @@ COPY clang/include /usr/local/include/
 COPY clang/lib /usr/local/lib/
 COPY clang/bin /usr/local/bin/
 #golang
-RUN $CURL_ARG -O https://dl.google.com/go/go1.13.linux-amd64.tar.gz \
+#COPY go1.13.linux-amd64.tar.gz /tmp/go1.13.linux-amd64.tar.gz
+RUN cd /tmp \
+    && $CURL_ARG -O https://dl.google.com/go/go1.13.linux-amd64.tar.gz \
     && tar -C /usr/local -xzf go1.13.linux-amd64.tar.gz \
     && mkdir -p $UHOME/go/{bin,pkg,src} \
     && echo "export GOROOT=/usr/local/go" >> $UHOME/.zshrc \
