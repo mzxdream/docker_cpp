@@ -33,9 +33,9 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
         locales \
     && sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen \
     && locale-gen
-ENV LANG en_US.UTF-8
-ENV LANGUAGE en_US:en
-ENV LC_ALL en_US.UTF-8
+ENV LANG=en_US.UTF-8 \
+    LANGUAGE=en_US:en \
+    LC_ALL=en_US.UTF-8
 #timezone
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
         tzdata \
@@ -63,10 +63,15 @@ COPY clang/bin /usr/local/bin/
 RUN cd /tmp \
     && $CURL_ARG -O https://dl.google.com/go/go1.13.linux-amd64.tar.gz \
     && tar -C /usr/local -xzf go1.13.linux-amd64.tar.gz \
-    && mkdir -p $UHOME/go/{bin,pkg,src} \
-    && echo "export GOROOT=/usr/local/go" >> $UHOME/.zshrc \
-    && echo "export GOPATH=$UHOME/go" >> $UHOME/.zshrc \
-    && echo 'export PATH=$PATH:$GOROOT/bin:$GOPATH/bin' >> $UHOME/.zshrc
+    && mkdir -p $UHOME/go/bin \
+    && mkdir -p $UHOME/go/pkg \
+    && mkdir -p $UHOME/go/src
+    #&& echo "export GOROOT=/usr/local/go" >> $UHOME/.zshrc \
+    #&& echo "export GOPATH=$UHOME/go" >> $UHOME/.zshrc \
+    #&& echo 'export PATH=$PATH:$GOROOT/bin:$GOPATH/bin' >> $UHOME/.zshrc
+ENV GOROOT=/usr/local/go \
+    GOPATH=$UHOME/go \
+    PATH=$PATH:$GOROOT/bin:$GOPATH/bin
 #vim
 #COPY vim /tmp/vim
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
