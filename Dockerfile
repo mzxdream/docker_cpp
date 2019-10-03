@@ -10,9 +10,8 @@ ENV TERM=xterm-256color \
 #ARG CURL_ARG="curl --socks5 host.docker.internal:1080"
 ARG CURL_ARG="curl"
 USER root
-RUN rm -Rf /var/lib/apt/lists/ \
-    && mkdir -p /var/lib/apt/lists/partial/ \
-    && sed -i s@/archive.ubuntu.com/@/mirrors.aliyun.com/@g /etc/apt/sources.list \
+RUN sed -i s@/archive.ubuntu.com/@/mirrors.aliyun.com/@g /etc/apt/sources.list \
+    && apt-get clean \
     && apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
         git \
