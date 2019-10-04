@@ -118,6 +118,17 @@ COPY .ycm_extra_conf.py $UHOME/.ycm_extra_conf.py
 RUN $CURL_ARG -fLo $UHOME/.vim/autoload/plug.vim --create-dirs \
         https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim \
     && vim --not-a-term -c "PlugInstall! | qall!"
+#protobuf go
+RUN cd /tmp \
+    && $CURL_ARG -LO https://github.com/protocolbuffers/protobuf/releases/download/v3.10.0/protobuf-all-3.10.0.tar.gz \
+    && tar zxvf protobuf-all-3.10.0.tar.gz \
+    && cd protobuf-3.10.0 \
+    && ./autogen.sh \
+    && ./configure \
+    && make \
+    && make install \
+    && ldconfig \
+    && go get github.com/golang/protobuf/protoc-gen-go
 #clear
 RUN rm -rf /var/lib/apt/lists/*
 
