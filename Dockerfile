@@ -71,7 +71,7 @@ RUN cd /tmp \
     #&& echo 'export PATH=$PATH:$GOROOT/bin:$GOPATH/bin' >> $UHOME/.zshrc
 ENV GOROOT=/usr/local/go \
     GOPATH=$UHOME/go \
-    PATH=$PATH:$GOROOT/bin:$GOPATH/bin
+    PATH=$PATH:$GOROOT/bin:${GOPATH//://bin:}/bin
 #vim
 #COPY vim /tmp/vim
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
