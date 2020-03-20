@@ -213,6 +213,7 @@ call plug#begin('~/.vim/plugged')
         \ "cpp":1,
         \ "go":1,
         \ "python":1,
+        \ "lua":1,
         \ "sh":1,
         \ "zsh":1,
         \ }
