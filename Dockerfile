@@ -96,6 +96,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
         --enable-largefile \
         --enable-pythoninterp \
         --with-python-config-dir=$(python2.7-config --configdir) \
+        --enable-python3interp \
         --enable-perlinterp \
         --enable-luainterp \
         --enable-fail-if-missing \
